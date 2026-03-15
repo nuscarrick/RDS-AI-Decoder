@@ -31,6 +31,9 @@ An AI-powered RDS monitor for fm-dx-webserver that uses machine learning to pred
 - Click the RDS Decoder button to open the RDS monitor panel 
 - As an administrator, you can activate RDS Follow Mode. This will feed the plugin's RDS data directly into the web server
 
+Detailed documentation on how the plugin works can be found [here](https://highpoint.fmdx.org/manuals/RDS-AI-Decoder-Documentation.html)
+A demo video can be viewed [here](https://highpoint.fmdx.org/videos/RDS-AI-Decoder-Demo.mp4)
+
 ## Notes: 
 
 - All data is cached in the file rdsm_memory.json in the specific plugin folder. Different retention periods apply to the data

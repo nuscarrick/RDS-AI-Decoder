@@ -11,7 +11,7 @@
 'use strict';
 
 // ── Debug switch ─────────────────────────────────────────────
-const DEBUG = true;
+const DEBUG = false;
 
 const fs         = require('fs');
 const path       = require('path');

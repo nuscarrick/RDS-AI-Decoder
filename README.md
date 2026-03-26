@@ -5,8 +5,8 @@ An AI-powered RDS decoder for fm-dx-webserver that uses machine learning to pred
 
 ## Version 2.1
 
-- Optical validation of AF frequencies added
-- Consideration of regional PI codes implemented
+- AF frequency visual validation — Received alternate frequencies (AF) are now visually highlighted in the FMDX.ORG panel. Frequencies already confirmed from the live signal are shown with a coloured chip, clearly distinguishing received AFs from database-only entries.
+- Regional PI code support (PIreg) — The fmdx.org index now includes regional PI codes (pireg). Stations that transmit a regional PI variant (e.g. Radio 1 Ljubljana with pireg=9857) are now correctly identified even when the received PI code does not match the station's primary PI field in the database. The PI-to-frequency index is built for both primary and regional PI codes.
 
 ## Installation notes:
 
@@ -24,7 +24,7 @@ An AI-powered RDS decoder for fm-dx-webserver that uses machine learning to pred
 - Click the RDS Decoder button to open the RDS monitor panel 
 - As an administrator, you can activate RDS Follow Mode. This will feed the plugin's RDS data directly into the web server
 
-Detailed documentation on how the plugin works can be found [here](https://highpoint.fmdx.org/manuals/RDS-AI-Decoder-Documentation-v2.0.html)
+Detailed documentation on how the plugin works can be found [here](https://highpoint.fmdx.org/manuals/RDS-AI-Decoder-Documentation-v2.1.html)
 A demo video can be viewed [here](https://highpoint.fmdx.org/videos/RDS-AI-Decoder-Demo.mp4)
 A live demo with the RDS Follow function activated is available [here](http://highpoint2000.selfhost.de:8080)
 

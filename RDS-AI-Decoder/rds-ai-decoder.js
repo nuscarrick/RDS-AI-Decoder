@@ -2,7 +2,7 @@
 //                                                           //
 //  RDS AI DECODER CLIENT PLUGIN FOR FM-DX-WEBSERVER (V2.1)  //
 //                                                           //
-//  by Highpoint                last update: 2026-03-25      //
+//  by Highpoint                last update: 2026-03-26      //
 //                                                           //
 //  https://github.com/Highpoint2000/RDS-AI-Decoder          //
 //                                                           //
@@ -16,6 +16,7 @@
     const pluginUpdateUrl       = 'https://raw.githubusercontent.com/Highpoint2000/RDS-AI-Decoder/refs/heads/main/RDS-AI-Decoder/rds-ai-decoder.js';
     const pluginSetupOnlyNotify = false;
     const CHECK_FOR_UPDATES     = true;
+    const pluginManualUrl       = 'https://highpoint.fmdx.org/manuals/RDS-AI-Decoder-Documentation-v2.1.html';
 
     if (typeof sendToast !== 'function') {
         window.sendToast = function(cls, src, txt) {
@@ -23,7 +24,7 @@
         };
     }
 
-    // ── Update check ──────────────────────��──────────────────
+    // ── Update check ──────────────────────────────────────────
     function checkUpdate(setupOnly, name, urlUpdateLink, urlFetchLink) {
         const isSetupPath = (window.location.pathname || '/').indexOf('/setup') >= 0;
         fetch(urlFetchLink + '?t=' + Date.now(), { cache: 'no-store' })
@@ -525,7 +526,7 @@
             });
         }
 
-        // ── AF coverage percentage ─────��──────────────────────
+        // ── AF coverage percentage ─────────────────────────────
         // Counts how many DB frequencies (altFreqs) have been received (st.af)
         let afCoverageHTML = '';
         if (uniqueFreqs.length > 0) {
@@ -668,7 +669,7 @@
         }
     }
 
-    // ── BER: 0% = perfect, 100% = all blocks lost ─────────────
+    // ── BER: 0% = perfect, 100% = all blocks lost ──��──────────
     function updateBER(errB) {
         if (!errB || !Array.isArray(errB)) return;
         const hasError = errB.some(e => e >= 2);
@@ -836,14 +837,17 @@
         #rdsm-panel.vis{display:block;}
         #rdsm-hdr{display:flex;align-items:center;justify-content:space-between;
             padding:10px 14px 8px;background:var(--color-main-bright,#4a90d9);cursor:move;}
-        .rdsm-ht{font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;
+        .rdsm-ht{font-size:14px;font-weight:700;color:#fff;text-transform:uppercase;
             letter-spacing:1px;font-family:"Titillium Web",Calibri,sans-serif;}
-        #rdsm-dot{display:inline-block;width:8px;height:8px;border-radius:50%;
-            background:#ff4444;transition:background .4s;vertical-align:middle;margin-right:6px;}
+        #rdsm-dot{display:inline-block;width:16px;height:6px;border-radius:50%;
+            background:#ff4444;transition:background .4s;vertical-align:middle;margin-right:10px;}
         #rdsm-dot.ok{background:#44ff88;}
-        #rdsm-close{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;
+        #rdsm-close{background:none;border:none;color:#fff;font-size:16px;cursor:pointer;
             opacity:.8;font-family:"Titillium Web",Calibri,sans-serif;}
         #rdsm-close:hover{opacity:1;}
+        #rdsm-manual-link{background:none;border:none;color:#fff;font-size:16px;cursor:pointer;
+            opacity:.8;font-family:"Titillium Web",Calibri,sans-serif;}
+        #rdsm-manual-link:hover{opacity:1;}
         #rdsm-body{padding:11px 14px;}
         .rr{display:flex;align-items:center;margin-bottom:8px;gap:8px;}
         .rl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
@@ -957,7 +961,12 @@
           <div id="rdsm-hdr">
             <span class="rdsm-ht">${pluginName}</span>
             <span style="display:flex;align-items:center;gap:5px">
-              <span id="rdsm-dot" title="/data_plugins"></span>
+
+              <span id="rdsm-dot" title="Connection status"></span>
+              <a id="rdsm-manual-link"
+                 href="${pluginManualUrl}"
+                 target="_blank"
+                 title="Open RDS AI Decoder Manual">?</a>
               <button id="rdsm-close">✕</button>
             </span>
           </div>
@@ -1084,7 +1093,7 @@
     function makeDrag(el, h) {
         let sx, sy, sl, st2, dr = false;
         h.addEventListener('mousedown', e => {
-            if (e.target.id === 'rdsm-close') return;
+            if (e.target.id === 'rdsm-close' || e.target.id === 'rdsm-manual-link') return;
             dr = true; el.classList.add('drag');
             sx = e.clientX; sy = e.clientY;
             const r = el.getBoundingClientRect(); sl = r.left; st2 = r.top;

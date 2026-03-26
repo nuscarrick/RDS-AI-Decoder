@@ -1,6 +1,7 @@
 # RDS AI Decoder
 An AI-powered RDS decoder for fm-dx-webserver that uses machine learning to predict and correct PS and RadioText data even under poor reception conditions.
-<img width="1592" height="846" alt="Image" src="https://github.com/user-attachments/assets/3ba0548a-911b-4377-b128-2209bf131448" />
+<img width="1714" height="847" alt="grafik" src="https://github.com/user-attachments/assets/e3e9e4ee-320d-4ca8-b14d-7749241f6bf6" />
+
 
 ## Version 2.1
 

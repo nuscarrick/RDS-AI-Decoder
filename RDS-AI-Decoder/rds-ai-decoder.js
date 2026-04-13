@@ -11,11 +11,11 @@
 (() => {
 
     const pluginVersion         = '2.2a';
-    const pluginName            = 'RDS AI Decoder';
+    const pluginName            = t('plugin.rdsAiDecoder');
     const pluginHomepageUrl     = 'https://github.com/Highpoint2000/RDS-AI-Decoder/releases';
     const pluginUpdateUrl       = 'https://raw.githubusercontent.com/Highpoint2000/RDS-AI-Decoder/refs/heads/main/RDS-AI-Decoder/rds-ai-decoder.js';
     const pluginSetupOnlyNotify = false;
-    const CHECK_FOR_UPDATES     = true;
+    const CHECK_FOR_UPDATES     = false;
     const pluginManualUrl       = 'https://highpoint.fmdx.org/manuals/RDS-AI-Decoder-Documentation-v2.2a.html';
 
     if (typeof sendToast !== 'function') {
@@ -36,11 +36,11 @@
                 const remoteVer = match[1];
                 if (remoteVer === pluginVersion) return;
                 sendToast('warning', name,
-                    `Update available: v${pluginVersion} -> v${remoteVer}. <a href="${urlUpdateLink}" target="_blank">Download</a>`);
+                    `${t('plugin.updateAvailable')}: v${pluginVersion} -> v${remoteVer}. <a href="${urlUpdateLink}" target="_blank">${t('common.download')}</a>`);
                 if (!setupOnly || isSetupPath) {
                     const settings = document.getElementById('plugin-settings');
                     if (settings && !settings.innerHTML.includes(urlUpdateLink))
-                        settings.innerHTML += `<br><a href="${urlUpdateLink}" target="_blank">[${name}] Update: ${pluginVersion} -> ${remoteVer}</a>`;
+                        settings.innerHTML += `<br><a href="${urlUpdateLink}" target="_blank">[${name}] ${t('common.update')}: ${pluginVersion} -> ${remoteVer}</a>`;
                     const navIcon =
                         document.querySelector('.wrapper-outer #navigation .sidenav-content .fa-puzzle-piece') ||
                         document.querySelector('.wrapper-outer .sidenav-content') ||
@@ -335,7 +335,7 @@
             if (eccStr && eccStr !== st.ecc) {
                 st.ecc = eccStr;
                 const el = document.getElementById('rdsm-ecc-flag');
-                if (el) { el.textContent = 'ECC ' + eccStr; el.className = 'rf on'; el.title = 'Extended Country Code: 0x' + eccStr; }
+                if (el) { el.textContent = 'ECC ' + eccStr; el.className = 'rf on'; el.title = t('plugin.rdsAiDecoderPlugin.extendedCountryCode') + ': 0x' + eccStr; }
             }
         }
         updateBER(d.errB);
@@ -593,7 +593,7 @@
                 font-size:10px;font-weight:700;letter-spacing:.5px;
                 color:#666;font-family:'Titillium Web',Calibri,sans-serif;
                 white-space:nowrap;"
-                title="AF received: ${matched} of ${total} from FMDX.ORG DB">
+                title="${t('plugin.rdsAiDecoderPlugin.afReceived')}: ${matched} of ${total} from DB">
                 AF ${matched}/${total} (${pct}%)
             </span>`;
         }
@@ -604,7 +604,7 @@
         const hasCoverage  = afCoverageHTML.length > 0;
 
         el.innerHTML = `
-            <span class="rl" style="flex-shrink:0;padding-top:2px;">FMDX.ORG</span>
+            <span class="rl" style="flex-shrink:0;padding-top:2px;display:none;">FMDX.ORG</span>
             <div style="display:flex;flex-direction:column;gap:4px;width:100%;">
                 ${hasHeader ? `<div style="height:18px;display:flex;align-items:center;">${headerName}</div>` : ''}
                 ${hasChips  ? `<div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">${variantChips}</div>` : ''}
@@ -714,8 +714,8 @@
         if (st.af && st.af.length > 0) {
             el.className   = 'rf on';
             el.textContent = 'AF ' + st.af.length;
-            el.title       = 'Alternate Frequencies: ' +
-                st.af.map(f => parseFloat(f).toFixed(1)).join(', ');
+            el.title       =  t('plugin.rdsAiDecoderPlugin.alternateFrequencies') + ': ' +
+            st.af.map(f => parseFloat(f).toFixed(1)).join(', ');
         } else {
             el.className   = 'rf';
             el.textContent = 'AF';
@@ -744,18 +744,18 @@
         if (pct) pct.textContent = berPct + '%';
     }
 
-    function refreshStats() { setEl('rdsm-gc', `Groups: ${st.grpTotal}`); }
+    function refreshStats() { setEl('rdsm-gc', t('common.groups') + ': ' + st.grpTotal); }
 
     // ── Statistics panel ──────────────────────────────────────
     function refreshStatsPanel() {
         if (!statsOpen) return;
         setEl('ai-cur-pi',  st.pi);
-        setEl('ai-active',  st.aiActive ? '✅ active' : '⏳ waiting...');
+        setEl('ai-active',  st.aiActive ? '✅ ' + t('plugin.rdsAiDecoderPlugin.active') : '⏳ ' + t('plugin.rdsAiDecoderPlugin.waiting') + '...');
         if (st.aiStats) {
             setEl('ai-seen',    st.aiStats.seenCount?.toLocaleString() || '-');
             setEl('ai-votes',   st.aiStats.psVoteTotal?.toLocaleString() || '-');
             setEl('ai-freq',    st.aiStats.freq || '-');
-            setEl('ai-dynamic', st.aiStats.psIsDynamic ? '⚡ dynamic' : '🔒 static');
+            setEl('ai-dynamic', st.aiStats.psIsDynamic ? '⚡ ' + t('plugin.rdsAiDecoderPlugin.dynamic') : '🔒 ' + t('plugin.rdsAiDecoderPlugin.static'));
         }
         const refRow = document.getElementById('ai-ref-row');
         if (st.refStation) {
@@ -788,7 +788,7 @@
         if (st.psLocked) {
             const reason = st.psLockReason ? ` - ${st.psLockReason}` : '';
             el.innerHTML = `
-                <span class="rf on" style="background:#1b3b2a;color:#44ff88;border:1px solid #44ff88;padding:3px 7px;line-height:1.6;">LOCKED</span>
+                <span class="rf on" style="background:#1b3b2a;color:#44ff88;border:1px solid #44ff88;padding:3px 7px;line-height:1.6;">${t('plugin.rdsAiDecoderPlugin.LOCKED')}</span>
                 <span style="color:#777;font-size:11px;">${reason}</span>`;
             return;
         }
@@ -797,12 +797,12 @@
         if (st.psProvisional && confPct >= 55) {
             const stableS = (st.psStableMs || 0) / 1000;
             el.innerHTML = `
-                <span class="rf on" style="background:#2a2331;color:#c8a020;border:1px solid #c8a020;padding:3px 7px;line-height:1.6;">PROVISIONAL</span>
-                <span style="color:#888;font-size:11px;">${confPct}% · stable ${stableS.toFixed(1)}s</span>`;
+                <span class="rf on" style="background:#2a2331;color:#c8a020;border:1px solid #c8a020;padding:3px 7px;line-height:1.6;">${t('plugin.rdsAiDecoderPlugin.PROVISIONAL')}</span>
+                <span style="color:#888;font-size:11px;">${confPct}% · ${t('plugin.rdsAiDecoderPlugin.stable')} ${stableS.toFixed(1)}s</span>`;
         } else {
             el.innerHTML = `
-                <span class="rf" style="border:1px solid #2a2a2a;">WAIT</span>
-                <span style="color:#555;font-size:11px;">collecting…</span>`;
+                <span class="rf" style="border:1px solid #2a2a2a;">${t('plugin.rdsAiDecoderPlugin.WAIT')}</span>
+                <span style="color:#555;font-size:11px;">${t('plugin.rdsAiDecoderPlugin.collecting')}…</span>`;
         }
     }
 
@@ -812,10 +812,10 @@
         if (panelBtn) {
             panelBtn.classList.toggle('on', st.rdsFollow);
             panelBtn.title = !isAdmin
-                ? 'Administrator login required to toggle RDS Follow'
+                ? t('plugin.rdsAiDecoderPlugin.adminLoginRequired')
                 : st.rdsFollow
-                    ? 'RDS Follow active - AI feeds the web server'
-                    : 'RDS Follow inactive - native decoder active';
+                    ? t('plugin.rdsAiDecoderPlugin.rdsFollowActive')
+                    : t('plugin.rdsAiDecoderPlugin.rdsFollowInactive');
             panelBtn.style.opacity = isAdmin ? '' : '0.5';
             panelBtn.style.cursor  = isAdmin ? 'pointer' : 'not-allowed';
         }
@@ -829,7 +829,7 @@
     function toggleRdsFollow() {
         checkAdminMode();
         if (!isAdmin) {
-            sendToast('warning', pluginName, 'Administrator login required to toggle RDS Follow.');
+            sendToast('warning', pluginName, t('plugin.rdsAiDecoderPlugin.adminLoginRequired'));
             return;
         }
         const next = !st.rdsFollow;
@@ -885,7 +885,7 @@
         const psnEl = document.getElementById('rdsm-psname');
         if (psnEl) {
             psnEl.innerHTML = `
-                <span class="rl" style="flex-shrink:0;padding-top:2px;">FMDX.ORG</span>
+                <span class="rl" style="flex-shrink:0;padding-top:2px;display:none;">FMDX.ORG</span>
                 <div style="display:flex;flex-direction:column;gap:4px;width:100%;">
                     <div style="min-height:4px;"></div>
                 </div>`;
@@ -895,14 +895,14 @@
         const ms = document.getElementById('rdsm-ms');
         if (ms) { ms.textContent = 'MUSIC'; ms.className = 'rf'; }
         setFlag('rdsm-st', false);
-        setEl('rdsm-gc', 'Groups: 0');
+        setEl('rdsm-gc', t('common.groups') + ': 0');
         const bar = document.getElementById('rdsm-bf'), pct = document.getElementById('rdsm-bp');
         if (bar) { bar.style.width = '0%'; bar.style.background = '#44cc88'; }
         if (pct) pct.textContent = '0%';
 
         if (statsOpen) {
             setEl('ai-cur-pi',      '-');
-            setEl('ai-active',      '⏳ waiting...');
+            setEl('ai-active',      '⏳ ' + t('plugin.rdsAiDecoderPlugin.waiting') + '...');
             setEl('ai-seen',        '-');
             setEl('ai-votes',       '-');
             setEl('ai-freq',        '-');
@@ -1065,11 +1065,11 @@
           <div id="rdsm-hdr">
             <span class="rdsm-ht">${pluginName}</span>
             <span style="display:flex;align-items:center;gap:5px">
-              <span id="rdsm-dot" title="Connection status"></span>
+              <span id="rdsm-dot" title="${t('plugin.rdsAiDecoderPlugin.connectionStatus')}"></span>
               <a id="rdsm-manual-link"
-                 href="${pluginManualUrl}"
-                 target="_blank"
-                 title="Open RDS AI Decoder Manual">?</a>
+                href="${pluginManualUrl}"
+                target="_blank"
+                title="${t('plugin.rdsAiDecoderPlugin.openManual')}">?</a>
               <button id="rdsm-close">✕</button>
             </span>
           </div>
@@ -1078,18 +1078,18 @@
               <span class="rl">Freq</span>
               <span class="rv">
                 <span id="rdsm-freq">-</span>
-                <span id="rdsm-stats-btn"><span id="rdsm-stats-arrow">▶</span> STATISTICS</span>
+                <span id="rdsm-stats-btn"><span id="rdsm-stats-arrow">▶</span> ${t('plugin.rdsAiDecoderPlugin.STATISTICS')}</span>
               </span>
             </div>
             <div class="rr">
-              <span class="rl">PI Code</span>
+              <span class="rl">${t('plugin.rdsAiDecoderPlugin.piCode')}</span>
               <span class="rv" id="rdsm-pi">----</span>
             </div>
             <div class="rr">
-              <span class="rl">Status</span>
+              <span class="rl">${t('plugin.rdsAiDecoderPlugin.status')}</span>
               <span class="rv" id="rdsm-status">
-                <span class="rf" style="border:1px solid #2a2a2a;">WAIT</span>
-                <span style="color:#555;font-size:11px;">collecting…</span>
+                <span class="rf" style="border:1px solid #2a2a2a;">${t('plugin.rdsAiDecoderPlugin.WAIT')}</span>
+                <span style="color:#555;font-size:11px;">${t('plugin.rdsAiDecoderPlugin.collecting')}…</span>
               </span>
             </div>
             <hr class="rdiv">
@@ -1114,15 +1114,15 @@
             <div class="rr" style="align-items:flex-start">
               <span class="rl" style="margin-top:1px">RT</span>
               <div id="rdsm-rt-wrap">
-                <span class="rt-line-label">previous RT</span>
+                <span class="rt-line-label">${t('plugin.rdsAiDecoderPlugin.previousRT')}</span>
                 <span class="rt-line" id="rdsm-rt1"><span style="color:#333">-</span></span>
-                <span class="rt-line-label">current</span>
+                <span class="rt-line-label">${t('plugin.rdsAiDecoderPlugin.current')}</span>
                 <span class="rt-line" id="rdsm-rt2"><span style="color:#333">-</span></span>
               </div>
             </div>
             <hr class="rdiv">
             <div class="rr">
-              <span class="rl">Flags</span>
+              <span class="rl">${t('plugin.rdsAiDecoderPlugin.flags')}</span>
               <div class="rfl">
                 <span class="rf" id="rdsm-tp">TP</span>
                 <span class="rf" id="rdsm-ta">TA</span>
@@ -1134,24 +1134,24 @@
             </div>
             <hr class="rdiv">
             <div class="rr" style="align-items:flex-start">
-              <span class="rl" style="margin-top:2px">Groups</span>
+              <span class="rl" style="margin-top:2px">${t('common.groups')}</span>
               <div id="rdsm-gg">
                 ${GA.map(g => `<span class="rgc" id="rg-${g}">${g}</span>`).join('')}
               </div>
             </div>
             <hr class="rdiv">
             <div id="rdsm-psname">
-              <span class="rl" style="flex-shrink:0;padding-top:2px;">FMDX.ORG</span>
+              <span class="rl" style="flex-shrink:0;padding-top:2px;display:none;">FMDX.ORG</span>
               <div style="display:flex;flex-direction:column;gap:4px;width:100%;">
                 <div style="min-height:4px;"></div>
               </div>
             </div>
           </div>
           <div id="rdsm-stats">
-            <span id="rdsm-gc">Groups: 0</span>
+            <span id="rdsm-gc">${t('common.groups')}: 0</span>
             <span id="rdsm-follow-wrap">
-              <button id="rdsm-follow-btn" title="RDS Follow inactive">
-                <span id="rdsm-follow-dot"></span>RDS Follow
+              <button id="rdsm-follow-btn" title="${t('plugin.rdsAiDecoderPlugin.rdsFollowInactiveShort')}">
+                <span id="rdsm-follow-dot"></span>${t('plugin.rdsAiDecoderPlugin.rdsFollow')}
               </button>
             </span>
             <span id="rdsm-ber-wrap">BER
@@ -1161,30 +1161,30 @@
           </div>
         </div>
         <div id="rdsm-stats-pan">
-            <div class="ai-stats-title">STATISTICS</div>
-            <div class="ai-stats-r">AI connection: <span id="ai-active">⏳</span></div>
-            <div class="ai-stats-r">Current PI: <span id="ai-cur-pi">-</span></div>
-            <div class="ai-stats-r">PS type: <span id="ai-dynamic">-</span></div>
-            <div class="ai-stats-r">Groups received: <span id="ai-seen">-</span></div>
-            <div class="ai-stats-r">PS votes total: <span id="ai-votes">-</span></div>
-            <div class="ai-stats-r">Last seen on: <span id="ai-freq">-</span></div>
+            <div class="ai-stats-title">${t('plugin.rdsAiDecoderPlugin.STATISTICS')}</div>
+            <div class="ai-stats-r">${t('plugin.rdsAiDecoderPlugin.aiConnection')}: <span id="ai-active">⏳</span></div>
+            <div class="ai-stats-r">${t('plugin.rdsAiDecoderPlugin.currentPI')}: <span id="ai-cur-pi">-</span></div>
+            <div class="ai-stats-r">${t('plugin.rdsAiDecoderPlugin.psType')}: <span id="ai-dynamic">-</span></div>
+            <div class="ai-stats-r">${t('plugin.rdsAiDecoderPlugin.groupsReceived')}: <span id="ai-seen">-</span></div>
+            <div class="ai-stats-r">${t('plugin.rdsAiDecoderPlugin.psVotesTotal')}: <span id="ai-votes">-</span></div>
+            <div class="ai-stats-r">${t('plugin.rdsAiDecoderPlugin.lastSeenOn')}: <span id="ai-freq">-</span></div>
             <div class="ai-stats-ref" id="ai-ref-row" style="display:none">
-              <span style="color:#888">🌐 fmdx.org</span>
+              <span style="color:#888">🌐 ${t('plugin.rdsAiDecoderPlugin.fmdxorg')}</span>
               <span id="ai-ref-station" style="flex:1;margin:0 8px;overflow:hidden;
                 text-overflow:ellipsis;white-space:nowrap"></span>
               <span id="ai-ref-dist" style="margin-right:8px;color:#888"></span>
-              <span>match: <span id="ai-ref-match">-</span></span>
+              <span>${t('plugin.rdsAiDecoderPlugin.match')}: <span id="ai-ref-match">-</span></span>
             </div>
             <div class="ai-stats-r" style="flex-direction:column;gap:3px; margin-top:8px;">
-              PS slots:<br>
+              ${t('plugin.rdsAiDecoderPlugin.psSlots')}:<br>
               <span id="ai-ps-breakdown"
                 style="color:#888;font-size:10px;
                 font-family:'Titillium Web',Calibri,sans-serif;"></span>
             </div>
             <div class="ai-stats-leg">
-              bright = high confidence · dark = low<br>
-              🌐 = fmdx.org confirmed (gold) · 🔶 = fmdx.org seed (amber)<br>
-              ✅ = raw-verified (2× err≤1, same char)
+              ${t('plugin.rdsAiDecoderPlugin.brightLow')}<br>
+              🌐 = ${t('plugin.rdsAiDecoderPlugin.fmdxOrgConfirmed')} · 🔶 = ${t('plugin.rdsAiDecoderPlugin.fmdxOrgSeed')}<br>
+              ✅ = ${t('plugin.rdsAiDecoderPlugin.rawVerified')}
             </div>
         </div>
         `;
@@ -1226,7 +1226,7 @@
         const obs = new MutationObserver((_, o) => {
             if (typeof addIconToPluginPanel !== 'function') return;
             found = true; o.disconnect();
-            addIconToPluginPanel('rdsm-btn', 'RDS Decoder', 'solid', 'radio',
+            addIconToPluginPanel('rdsm-btn', t('plugin.rdsDecoder'), 'solid', 'radio',
                 `${pluginName} v${pluginVersion}`);
             const btnObs = new MutationObserver((_, o2) => {
                 const btn = document.getElementById('rdsm-btn');
@@ -1281,7 +1281,7 @@
             setDot(false);
             if (!_wsFailToast) {
                 _wsFailToast = true;
-                sendToast('error', pluginName, 'Connection to RDS AI Decoder failed.');
+                sendToast('error', pluginName, t('plugin.rdsAiDecoderPlugin.connectionFailed'));
             }
             reconn = setTimeout(connect, 5000);
         };
@@ -1301,8 +1301,8 @@
     let isAdmin = false;
     function checkAdminMode() {
         const bodyText = document.body.textContent || document.body.innerText;
-        isAdmin = bodyText.includes('You are logged in as an administrator.') ||
-                  bodyText.includes('You are logged in as an adminstrator.');
+        isAdmin = bodyText.includes(t('plugin.rdsAiDecoderPlugin.loggedInAsAdministrator')) ||
+                  bodyText.includes(t('plugin.rdsAiDecoderPlugin.loggedInAsAdminstrator'));
     }
     checkAdminMode();
 

@@ -21,7 +21,7 @@ const { logInfo, logWarn, logError } = require('../../server/console');
 
 const pluginConfig = {
     name:         'RDS AI Decoder',
-    version:      '2.2a',
+    version:      '1.0',
     frontEndPath: 'rds-ai-decoder.js',
 };
 module.exports = { pluginConfig };

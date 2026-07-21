@@ -10,10 +10,10 @@
 
 (() => {
 
-    const pluginVersion         = '2.2a';
+    const pluginVersion         = '1.0';
     const pluginName            = t('plugin.rdsAiDecoder');
-    const pluginHomepageUrl     = 'https://github.com/Highpoint2000/RDS-AI-Decoder/releases';
-    const pluginUpdateUrl       = 'https://raw.githubusercontent.com/Highpoint2000/RDS-AI-Decoder/refs/heads/main/RDS-AI-Decoder/rds-ai-decoder.js';
+    const pluginHomepageUrl     = 'https://github.com/nuscarrick/RDS-AI-Decoder/releases';
+    const pluginUpdateUrl       = 'https://raw.githubusercontent.com/nuscarrick/RDS-AI-Decoder/main/RDS-AI-Decoder/rds-ai-decoder.js';
     const pluginSetupOnlyNotify = false;
     const CHECK_FOR_UPDATES     = false;
     const pluginManualUrl       = 'https://highpoint.fmdx.org/manuals/RDS-AI-Decoder-Documentation-v2.2a.html';
